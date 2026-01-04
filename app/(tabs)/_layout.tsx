@@ -1,35 +1,15 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+// Exemplo básico de como deve ficar o seu _layout.tsx
+import { LanguageProvider } from '@/context/LanguageContext'; // Suponho que já tenha esse
+import { ThemeProvider } from '@/context/ThemeContext';
+import { Stack } from 'expo-router';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function Layout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+    <LanguageProvider>
+        <ThemeProvider>
+            {/* Seus componentes de navegação aqui (Stack ou Tabs) */}
+             <Stack screenOptions={{ headerShown: false }} />
+        </ThemeProvider>
+    </LanguageProvider>
   );
 }

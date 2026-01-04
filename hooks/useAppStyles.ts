@@ -1,19 +1,25 @@
-// assets/styles/index.ts
-import { StyleSheet, useColorScheme } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
+import { Dimensions, Platform, StatusBar, StyleSheet } from "react-native";
+
+// Pegamos a largura da tela para calcular tamanhos responsivos
+const { width } = Dimensions.get('window');
 
 export const useAppStyles = () => {
-    const colorScheme = useColorScheme();
-    const isDarkMode = colorScheme === 'dark';
+    const isDarkMode = useTheme();
 
     // Defining Dynamic Colors
     const colors = {
         headerBackground: isDarkMode ? '#052659' : '#FFFFFF',
         background: isDarkMode ? '#121212' : '#FFFFFF',
         text: isDarkMode ? '#FFFFFF' : '#000000',
-        secondBackgroundSelected:'#b7b7b7',
-        secondBackground:'#777777ff',
-        secondText: isDarkMode ? '#C1E8FF' : '#052659' ,
+        // NOVA COR: Verde Neon para destaque (Accent)
+        accent: '#33bffd', 
+        secondBackgroundSelected: '#b7b7b7',
+        secondBackground: '#777777ff',
+        secondText: isDarkMode ? '#C1E8FF' : '#052659',
         borderColor: isDarkMode ? '#333333' : '#E0E0E0',
+        subText: isDarkMode ? '#A1A1AA' : '#52525B',
+        modalBackground: isDarkMode ? '#1E1E1E' : '#F5F5F5',
     };
 
     return StyleSheet.create({
@@ -21,76 +27,152 @@ export const useAppStyles = () => {
             flex: 1,
             backgroundColor: colors.background,
         },
-        header: {
-            flexDirection: 'row',
-            textAlign: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: "30%",
-            maxHeight: 80,
-            alignItems: 'center',
-            gap: 8,
-            paddingTop: 20,
-            backgroundColor: colors.headerBackground,
-            flex: 1,
-        },
-        headerButtons: {
-            marginTop: 10,
-            gap: 10,
-            // backgroundColor: colors.secondBackground,
-            borderRadius: '10px',
-            borderWidth: 2,
-            borderColor: '#FFFFFF',
-            height: 30,
-            width: 100,
-            textAlign: 'center',
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontSize: 18,
-            cursor: 'pointer',
-        },
-        headerButtonsMode: {
-            marginTop: 10,
-            gap: 10,
-            borderRadius: '15px',
-            borderWidth: 2,
-            borderColor: '#FFFFFF',
-            height: 30,
-            width: 30,
-            textAlign: 'center',
-            justifyContent: 'center',
-            alignItems: 'center',
-            cursor: 'pointer',
-        },
-        textHeaderButtons:{
-            color: colors.text,
-            fontWeight: 600,
-        },
+        // --- ESTILO QUE ESTAVA FALTANDO (Isso corrige o erro) ---
         text: {
             color: colors.text,
             fontSize: 16,
         },
-        inicialContainer: {
-
+        
+        // --- HEADER ---
+        header: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            height: Platform.OS === 'ios' ? 100 : 80,
+            paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40,
+            paddingHorizontal: 15,
+            backgroundColor: colors.headerBackground,
+            elevation: 4,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            zIndex: 10,
         },
-        photoContainer: {
-
-        }, 
-        reactLogo: {
-
-        }, 
-        textInicialContainer: {
-            
+        headerButtons: {
+            paddingVertical: 6,
+            paddingHorizontal: 12,
+            borderRadius: 10,
+            borderWidth: 1.5,
+            borderColor: isDarkMode ? '#FFFFFF' : '#052659',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: 8,
         },
-        viewHome:{
-            padding: 10,
-            margin: 10,
+        modalOverlay: {
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        languageModal: {
+            width: '85%',
+            maxWidth: 340,
+            backgroundColor: colors.modalBackground, // Definido no hook (passo anterior)
+            borderRadius: 25,
+            padding: 25,
+            elevation: 20,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.25,
+            shadowRadius: 10,
+        },
+        languageOption: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: 12,
+            paddingHorizontal: 15,
+            borderRadius: 12,
+            marginBottom: 8,
+        },
+        languageText: {
+            fontSize: 16,
+            color: colors.text,
+            fontWeight: '500',
+        },
+        langSelectorBtn: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: 6,
+            paddingHorizontal: 10,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: colors.borderColor,
+            gap: 8,
+        },
+        headerButtonsMode: {
+            height: 35,
+            width: 35,
+            borderRadius: 17.5,
+            borderWidth: 1.5,
+            borderColor: isDarkMode ? '#FFFFFF' : '#052659',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: 8,
+        },
+        textHeaderButtons: {
+            color: colors.text,
+            fontWeight: '600',
+            fontSize: 12,
+        },
+        viewHome: {
+            justifyContent: 'center',
         },
         logoHome: {
-            cursor: 'pointer',
-            marginTop: 10,
-            height: 60,
-            width: 200,
-        }
+            height: 40,
+            width: 140,
+            resizeMode: 'contain',
+        },
+
+        // --- HERO SECTION ---
+        inicialContainer: {
+            paddingVertical: 40,
+            paddingHorizontal: 40,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+        },
+        photoContainer: {
+            marginBottom: 25,
+            elevation: 15,
+            shadowColor: colors.accent,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 10,
+            borderRadius: 40, 
+        },
+        reactLogo: {
+            width: width * 0.5, 
+            height: width * 0.5,
+            borderRadius: 40, 
+            borderWidth: 3,
+            borderColor: colors.accent,
+        },
+        textInicialContainer: {
+            alignItems: 'center',
+        },
+        heroGreeting: {
+            fontSize: 16,
+            fontWeight: '700',
+            color: colors.accent,
+            textTransform: 'uppercase',
+            letterSpacing: 1.5,
+            marginBottom: 10,
+        },
+        heroName: {
+            fontSize: 32,
+            fontWeight: '900',
+            color: colors.text,
+            textAlign: 'center',
+            marginBottom: 5,
+        },
+        heroCareer: {
+            fontSize: 20,
+            fontWeight: '600',
+            color: colors.subText,
+            textAlign: 'center',
+        },
     });
 };
