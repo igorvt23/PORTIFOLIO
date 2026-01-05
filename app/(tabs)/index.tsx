@@ -11,19 +11,19 @@ export default function Home() {
   const styles = useAppStyles();
   const { t } = useLanguage();
   const { toggleTheme, isDarkMode } = useTheme();
+  const iconMode = (isDarkMode) ? require('@/assets/images/sunny.png') : require('@/assets/images/moon.png');
+  const homeImage = (isDarkMode) ? require('@/assets/images/icone_home_branco.png') : require('@/assets/images/icone_home_preto.png');
   
-  // Usei ScrollView no container principal para garantir que
-  // em telas pequenas o conteúdo não seja cortado.
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.header}>
-          <View>
+          <View style={styles.headerLeft}>
               <Text style={styles.viewHome}>
-                <Image source={require('@/assets/images/icone_home_sem_fundo.png')} style={styles.logoHome}/>
+                <Image source={homeImage} style={styles.logoHome}/>
               </Text>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.headerCenter}>
               <View style={styles.headerButtons}>
                   <Text style={styles.textHeaderButtons}>{t('projects')}</Text>
               </View>
@@ -36,15 +36,17 @@ export default function Home() {
               <View style={styles.headerButtons}>
                   <Text style={styles.textHeaderButtons}>{t('contact')}</Text>
               </View>
+          </View>
+          <View style={styles.headerRight}>
               <TouchableOpacity style={styles.headerButtonsMode} onPress={toggleTheme}>
-                <Text style={{ fontSize: 18 }}>{isDarkMode ? '☀️' : '🌙'}</Text>
+                <Image source={iconMode} style={{ width: 32, height: 32 }}/>
              </TouchableOpacity>
               
               <HeaderLanguageSelector />
           </View>
       </View>
       
-      {/* --- HERO SECTION (Resumo Inicial Modernizado) --- */}
+      {/* --- HERO SECTION  --- */}
       <View style={styles.inicialContainer}>
           
           <View style={styles.textInicialContainer}>

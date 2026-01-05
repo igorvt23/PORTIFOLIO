@@ -3,9 +3,10 @@ import { Dimensions, Platform, StatusBar, StyleSheet } from "react-native";
 
 // Pegamos a largura da tela para calcular tamanhos responsivos
 const { width } = Dimensions.get('window');
+const isMobile = width < 768; 
 
 export const useAppStyles = () => {
-    const isDarkMode = useTheme();
+    const { isDarkMode } = useTheme();
 
     // Defining Dynamic Colors
     const colors = {
@@ -17,7 +18,7 @@ export const useAppStyles = () => {
         secondBackgroundSelected: '#b7b7b7',
         secondBackground: '#777777ff',
         secondText: isDarkMode ? '#C1E8FF' : '#052659',
-        borderColor: isDarkMode ? '#333333' : '#E0E0E0',
+        borderColor: isDarkMode ? '#E0E0E0' : '#333333',
         subText: isDarkMode ? '#A1A1AA' : '#52525B',
         modalBackground: isDarkMode ? '#1E1E1E' : '#F5F5F5',
     };
@@ -50,12 +51,34 @@ export const useAppStyles = () => {
             shadowRadius: 4,
             zIndex: 10,
         },
+        headerLeft: {
+            justifyContent: 'flex-start',
+            flex: 0, 
+        },
+
+        // Bloco Central: Flex 1 faz ele ocupar TODO o espaço sobrando, empurrando as pontas
+        headerCenter: {
+            flex: 1, 
+            flexDirection: 'row',
+            justifyContent: 'center', // Centraliza os itens no meio da tela
+            alignItems: 'center',
+            gap: 10
+        },
+
+        // Bloco Direito: Alinha itens no final
+        headerRight: {
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            flex: 0,
+            gap: 8,
+        },
         headerButtons: {
             paddingVertical: 6,
             paddingHorizontal: 12,
             borderRadius: 10,
             borderWidth: 1.5,
-            borderColor: isDarkMode ? '#FFFFFF' : '#052659',
+            borderColor: colors.borderColor,
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: 8,
@@ -104,9 +127,9 @@ export const useAppStyles = () => {
         headerButtonsMode: {
             height: 35,
             width: 35,
-            borderRadius: 17.5,
-            borderWidth: 1.5,
-            borderColor: isDarkMode ? '#FFFFFF' : '#052659',
+            // borderRadius: 17.5,
+            // borderWidth: 1.5,
+            // borderColor: isDarkMode ? '#FFFFFF' : '#052659',
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: 8,
@@ -121,18 +144,21 @@ export const useAppStyles = () => {
         },
         logoHome: {
             height: 40,
-            width: 140,
-            resizeMode: 'contain',
+            width: 160,
+            // resizeMode: 'contain',
         },
 
         // --- HERO SECTION ---
         inicialContainer: {
+            width: '100%',
+            maxWidth: 1200,
             paddingVertical: 40,
-            paddingHorizontal: 40,
-            flexDirection: 'row',
+            paddingHorizontal: 20,
+            alignSelf: "center",
+            flexDirection: isMobile ? "column" : "row",
             justifyContent: 'space-between',
             alignItems: 'center',
-            width: '100%',
+            gap: 20,
         },
         photoContainer: {
             marginBottom: 25,
