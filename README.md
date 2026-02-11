@@ -69,5 +69,5 @@ A aplicação foi construída com foco em **Mobile First**, mas totalmente adapt
 
 ---
 <div align="center">
-  Desenvolvido com ⚡ por Igor Viana Tomaz
+  Desenvolvido por Igor Viana Tomaz ⚡
 </div>
