@@ -4,6 +4,14 @@ Bem-vindo ao repositório do meu portfólio pessoal! Este projeto foi desenvolvi
 
 A aplicação foi construída com foco em **Mobile First**, mas totalmente adaptada para **Web** (Responsivo), utilizando o poder do React Native.
 
+<div align="center">
+  <img src="./assets/images/readme/home_dark.png" alt="Preview do App" width="100%">
+  <br><br>
+  
+  ## 🌐 [CLIQUE AQUI PARA ACESSAR O PORTFÓLIO ONLINE](https://igor-viana-portifolio.vercel.app/)
+  <br>
+</div>
+
 ## 📱 Tecnologias Utilizadas
 
 * **React Native (Expo)**: Core da aplicação.
@@ -25,8 +33,8 @@ A aplicação foi construída com foco em **Mobile First**, mas totalmente adapt
 
 1.  **Clone o repositório**
     ```bash
-    git clone [https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git](https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git)
-    cd SEU_REPOSITORIO
+    git clone [https://github.com/igorvt23/PORTIFOLIO.git](https://github.com/igorvt23/PORTIFOLIO.git)
+    cd PORTIFOLIO
     ```
 
 2.  **Instale as dependências**
@@ -46,8 +54,20 @@ A aplicação foi construída com foco em **Mobile First**, mas totalmente adapt
 
 ## 📬 Contato
 
-* **LinkedIn**: [https://www.linkedin.com/in/igor-viana-tomaz-080583238/]
-* **Email**: [igorvianat@gmail.com]
+<div align="center">
+  <a href="https://www.linkedin.com/in/igor-viana-tomaz-080583238" target="_blank">
+    <img src="./assets/images/socials/linkedin.png" height="50" alt="LinkedIn" style="margin-right: 20px;">
+  </a>
+  <a href="https://www.instagram.com/_hey.igors" target="_blank">
+    <img src="./assets/images/socials/instagram.png" height="50" alt="Instagram" style="margin-left: 20px;">
+  </a>
+</div>
+
+<br>
+
+* **Email**: igorvianat@gmail.com
 
 ---
-Desenvolvido com ⚡ por Igor Viana Tomaz
+<div align="center">
+  Desenvolvido com ⚡ por Igor Viana Tomaz
+</div>
