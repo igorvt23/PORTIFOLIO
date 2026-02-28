@@ -2,26 +2,19 @@ import { useLanguage } from "@/context/LanguageContext";
 import { certificates } from "@/data/certificates";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Dimensions,
   FlatList,
   Image,
+  Modal,
   Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
-// --- CONFIGURAÇÕES DO CARROSSEL ---
-const { width, height } = Dimensions.get("window");
-const CARD_WIDTH = width * 0.6;
-const CARD_HEIGHT = height * 0.36;
-const SPACING = 15;
-const SNAP_INTERVAL = CARD_WIDTH + SPACING;
+type CertificateItem = (typeof certificates)[number];
 
-// --- MAPEAMENTO DE IMAGENS ---
-// O require no React Native não aceita variáveis dinâmicas (ex: require(path)).
-// Precisamos mapear manualmente ou importar todas.
 const certImages: Record<string, any> = {
   "certificates01.png": require("@/assets/images/certificates/certificates01.png"),
   "certificates02.png": require("@/assets/images/certificates/certificates02.png"),
@@ -43,25 +36,33 @@ const certImages: Record<string, any> = {
   "certificates18.png": require("@/assets/images/certificates/certificates18.png"),
 };
 
-// --- COMPONENTE CARD INDIVIDUAL ---
-const CertificateCard = ({ item, t }: { item: any; t: any }) => {
+const CertificateCard = ({
+  item,
+  t,
+  onOpenPreview,
+  cardWidth,
+  cardHeight,
+}: {
+  item: CertificateItem;
+  t: (key: string) => string;
+  onOpenPreview: (item: CertificateItem) => void;
+  cardWidth: number;
+  cardHeight: number;
+}) => {
   const [isHovered, setIsHovered] = useState(false);
-
-  // Seleciona a imagem correta ou a padrão
-  const imageSource = certImages[item.photo] || certImages["default"];
+  const imageSource = certImages[item.photo] || certImages["certificates01.png"];
 
   return (
     <Pressable
-      // Lógica do Hover (Web) e Long Press (Mobile)
       onHoverIn={() => setIsHovered(true)}
       onHoverOut={() => setIsHovered(false)}
       onLongPress={() => setIsHovered(!isHovered)}
-      onPress={() => setIsHovered(!isHovered)} // No mobile, clique simples também pode alternar
+      onPress={() => onOpenPreview(item)}
       style={({ pressed }) => [
         styles.cardContainer,
         {
-          // Usei uma cor padrão pois o array não tem backgroundColor.
-          // Pode alternar cores se quiser.
+          width: cardWidth,
+          height: cardHeight,
           backgroundColor: "#1E1E1E",
           borderWidth: 1,
           borderColor: "#333",
@@ -75,12 +76,10 @@ const CertificateCard = ({ item, t }: { item: any; t: any }) => {
         <View>
           <Text style={styles.certTitle} numberOfLines={2}>
             {t(item.title)}
-          </Text>{" "}
-          {/* Título direto, ou t() se for traduzível */}
+          </Text>
           <Text style={styles.certYear}>{item.year}</Text>
         </View>
 
-        {/* Descrição Expansível (Se houver descrição no JSON) */}
         <View
           style={{
             height: isHovered ? "auto" : 0,
@@ -93,7 +92,6 @@ const CertificateCard = ({ item, t }: { item: any; t: any }) => {
           </Text>
         </View>
 
-        {/* Informações Específicas de Certificado */}
         <View style={styles.infoContainer}>
           <View style={styles.badge}>
             <Text style={styles.badgeLabel}>{t("university")}: </Text>
@@ -109,14 +107,21 @@ const CertificateCard = ({ item, t }: { item: any; t: any }) => {
   );
 };
 
-// --- COMPONENTE PRINCIPAL ---
 export function CertificatesCarousel() {
   const { t } = useLanguage();
+  const { width, height } = useWindowDimensions();
+  const isMobile = width < 768;
+
+  const CARD_WIDTH = isMobile ? width * 0.8 : width * 0.6;
+  const CARD_HEIGHT = isMobile ? Math.min(height * 0.48, 430) : height * 0.36;
+  const SPACING = isMobile ? 12 : 15;
+  const SNAP_INTERVAL = CARD_WIDTH + SPACING;
+
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [selectedCertificate, setSelectedCertificate] = useState<CertificateItem | null>(null);
 
-  // 1. Auto Scroll
   useEffect(() => {
     let interval: any;
 
@@ -128,7 +133,6 @@ export function CertificatesCarousel() {
     return () => clearInterval(interval);
   }, [currentIndex, isAutoScrolling]);
 
-  // 2. Navegação
   const handleScrollNext = () => {
     if (certificates.length === 0) return;
     const nextIndex = (currentIndex + 1) % certificates.length;
@@ -137,8 +141,7 @@ export function CertificatesCarousel() {
 
   const handleScrollPrev = () => {
     if (certificates.length === 0) return;
-    const prevIndex =
-      currentIndex === 0 ? certificates.length - 1 : currentIndex - 1;
+    const prevIndex = currentIndex === 0 ? certificates.length - 1 : currentIndex - 1;
     scrollToIndex(prevIndex);
   };
 
@@ -151,20 +154,21 @@ export function CertificatesCarousel() {
     });
   };
 
-  // 3. Pausa na interação
   const handleUserInteraction = () => {
     setIsAutoScrolling(false);
     setTimeout(() => setIsAutoScrolling(true), 8000);
   };
+
+  const selectedImage =
+    selectedCertificate ? certImages[selectedCertificate.photo] || certImages["certificates01.png"] : null;
 
   return (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionTitle}>{t("certificates")}</Text>
 
       <View style={styles.carouselWrapper}>
-        {/* Botão Esquerda */}
         <TouchableOpacity
-          style={[styles.arrowButton, styles.arrowLeft]}
+          style={[styles.arrowButton, styles.arrowLeft, isMobile && styles.arrowButtonMobile]}
           onPress={() => {
             handleScrollPrev();
             handleUserInteraction();
@@ -176,33 +180,36 @@ export function CertificatesCarousel() {
         <FlatList
           ref={flatListRef}
           data={certificates}
-          renderItem={({ item }) => <CertificateCard item={item} t={t} />}
+          renderItem={({ item }) => (
+            <CertificateCard
+              item={item}
+              t={t}
+              onOpenPreview={setSelectedCertificate}
+              cardWidth={CARD_WIDTH}
+              cardHeight={CARD_HEIGHT}
+            />
+          )}
           keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
           snapToInterval={SNAP_INTERVAL}
           decelerationRate="fast"
-          contentContainerStyle={{
-            paddingHorizontal: (width - CARD_WIDTH) / 2,
-          }}
+          contentContainerStyle={{ paddingHorizontal: (width - CARD_WIDTH) / 2 }}
           ItemSeparatorComponent={() => <View style={{ width: SPACING }} />}
           onMomentumScrollEnd={(ev) => {
-            const newIndex = Math.round(
-              ev.nativeEvent.contentOffset.x / SNAP_INTERVAL,
-            );
+            const newIndex = Math.round(ev.nativeEvent.contentOffset.x / SNAP_INTERVAL);
             setCurrentIndex(newIndex);
           }}
           onScrollBeginDrag={() => setIsAutoScrolling(false)}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_, index) => ({
             length: SNAP_INTERVAL,
             offset: SNAP_INTERVAL * index,
             index,
           })}
         />
 
-        {/* Botão Direita */}
         <TouchableOpacity
-          style={[styles.arrowButton, styles.arrowRight]}
+          style={[styles.arrowButton, styles.arrowRight, isMobile && styles.arrowButtonMobile]}
           onPress={() => {
             handleScrollNext();
             handleUserInteraction();
@@ -211,11 +218,28 @@ export function CertificatesCarousel() {
           <Text style={styles.arrowText}>›</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        visible={!!selectedCertificate}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSelectedCertificate(null)}
+      >
+        <Pressable style={styles.previewOverlay} onPress={() => setSelectedCertificate(null)}>
+          <Pressable style={styles.previewBox}>
+            {selectedImage ? (
+              <Image source={selectedImage} style={styles.previewImage} resizeMode="contain" />
+            ) : null}
+            <TouchableOpacity style={styles.closeBtn} onPress={() => setSelectedCertificate(null)}>
+              <Text style={styles.closeBtnText}>{t("close")}</Text>
+            </TouchableOpacity>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
 
-// --- ESTILOS ---
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 30,
@@ -230,8 +254,6 @@ const styles = StyleSheet.create({
     color: "#33bffd",
   },
   cardContainer: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     borderRadius: 20,
     overflow: "hidden",
     elevation: 5,
@@ -242,7 +264,7 @@ const styles = StyleSheet.create({
   },
   certImage: {
     width: "100%",
-    height: "60%", // Imagem ocupa metade do card
+    height: "60%",
     backgroundColor: "#ccc",
   },
   cardContent: {
@@ -266,7 +288,6 @@ const styles = StyleSheet.create({
     color: "#ddd",
     marginBottom: 5,
   },
-  // Estilos para Universidade e Carga Horária
   infoContainer: {
     marginTop: 5,
   },
@@ -275,16 +296,15 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   badgeLabel: {
-    color: "#33bffd", // Azul destaque
+    color: "#33bffd",
     fontWeight: "bold",
     fontSize: 12,
   },
   badgeText: {
     color: "#fff",
     fontSize: 12,
+    flexShrink: 1,
   },
-
-  // Estilos Estruturais e Setas (Iguais ao Projects)
   carouselWrapper: {
     position: "relative",
     justifyContent: "center",
@@ -301,11 +321,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: -20,
   },
+  arrowButtonMobile: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    marginTop: -17,
+  },
   arrowLeft: {
-    left: 15,
+    left: 10,
   },
   arrowRight: {
-    right: 15,
+    right: 10,
   },
   arrowText: {
     color: "#fff",
@@ -313,5 +339,39 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 32,
     marginTop: -4,
+  },
+  previewOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.82)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  previewBox: {
+    width: "100%",
+    maxWidth: 900,
+    backgroundColor: "#0f172a",
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "#1e293b",
+    padding: 12,
+    alignItems: "center",
+    gap: 10,
+  },
+  previewImage: {
+    width: "100%",
+    height: 520,
+    borderRadius: 8,
+  },
+  closeBtn: {
+    backgroundColor: "#33bffd",
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+  },
+  closeBtnText: {
+    color: "#001018",
+    fontWeight: "700",
+    fontSize: 13,
   },
 });

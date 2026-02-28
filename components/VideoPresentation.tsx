@@ -1,13 +1,14 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { ResizeMode, Video } from "expo-av";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -257,6 +258,13 @@ const VIDEO_SOURCE = require("../assets/videos/video_pt.mp4");
 
 export const VideoPresentation = () => {
   const { language } = useLanguage();
+  const { width } = useWindowDimensions();
+  const isAndroidCompact = Platform.OS === "android" && width < 980;
+  const styles = useMemo(
+    () => createStyles({ isAndroidCompact }),
+    [isAndroidCompact],
+  );
+
   const videoRef = useRef<Video>(null);
   const listRef = useRef<FlatList>(null);
 
@@ -306,7 +314,7 @@ export const VideoPresentation = () => {
             Platform.OS === "web"
               ? {
                   // @ts-ignore
-                  objectFit: "cover", // Preenche tudo sem deixar borda preta
+                  objectFit: "contain",
                   // @ts-ignore
                   objectPosition: "center", // Centraliza o rosto
                 }
@@ -314,7 +322,7 @@ export const VideoPresentation = () => {
           ]}
           source={VIDEO_SOURCE}
           useNativeControls={true}
-          resizeMode={ResizeMode.COVER}
+          resizeMode={ResizeMode.CONTAIN}
           isLooping={false}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
         />
@@ -328,7 +336,7 @@ export const VideoPresentation = () => {
             <View style={styles.playIconContainer}>
               <FontAwesome
                 name="play"
-                size={80} // Ícone ainda maior
+                size={isAndroidCompact ? 56 : 80}
                 color="white"
                 style={{ marginLeft: 8 }}
               />
@@ -371,72 +379,84 @@ export const VideoPresentation = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    gap: 30,
-    width: "100%",
-    maxWidth: 1700, // Largura Extrema
-    height: 750,    // Altura Extrema (Quase tela cheia vertical em laptops)
-    alignSelf: "center",
-    marginTop: 40,
-    marginBottom: 60,
-    paddingHorizontal: 20,
-    alignItems: "center",
-  },
-  videoSection: {
-    flex: 4, // O vídeo é 4x maior que a legenda
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#000",
-    borderRadius: 20, // Borda mais arredondada
-    position: "relative",
-    overflow: "hidden",
-    elevation: 15, // Sombra forte
-  },
-  video: {
-    width: "100%",
-    height: "100%",
-  },
-  playOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.2)",
-    zIndex: 20,
-  },
-  playIconContainer: {
-    width: 120, // Botão Massivo
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "rgba(0, 209, 255, 0.9)",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 10,
-    shadowColor: "#00D1FF",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 25,
-  },
-  lyricsSection: {
-    flex: 1, // Legenda fica fina na lateral
-    height: "90%",
-    backgroundColor: "rgba(255,255,255,0.05)",
-    borderRadius: 16,
-    paddingHorizontal: 20,
-  },
-  lyricText: {
-    fontSize: 18,
-    marginBottom: 24,
-    fontWeight: "500",
-  },
-  activeText: {
-    color: "#00D1FF",
-    fontSize: 24, // Texto ativo bem grande
-    fontWeight: "800",
-  },
-  inactiveText: {
-    color: "#666",
-  },
-});
+function createStyles({
+  isAndroidCompact,
+}: {
+  isAndroidCompact: boolean;
+}) {
+  return StyleSheet.create({
+    container: {
+      flexDirection: isAndroidCompact ? "column" : "row",
+      gap: isAndroidCompact ? 14 : 30,
+      width: "100%",
+      maxWidth: 1700,
+      alignSelf: "center",
+      height: isAndroidCompact ? undefined : 750,
+      marginTop: isAndroidCompact ? 18 : 40,
+      marginBottom: isAndroidCompact ? 26 : 60,
+      paddingHorizontal: isAndroidCompact ? 10 : 20,
+      alignItems: "center",
+    },
+    videoSection: {
+      flex: isAndroidCompact ? 0 : 4,
+      width: isAndroidCompact ? "100%" : undefined,
+      height: isAndroidCompact ? undefined : "100%",
+      aspectRatio: isAndroidCompact ? 16 / 9 : undefined,
+      minHeight: isAndroidCompact ? 230 : undefined,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#000",
+      borderRadius: 20,
+      position: "relative",
+      overflow: "hidden",
+      elevation: 15,
+    },
+    video: {
+      width: "100%",
+      height: "100%",
+    },
+    playOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "rgba(0,0,0,0.2)",
+      zIndex: 20,
+    },
+    playIconContainer: {
+      width: isAndroidCompact ? 78 : 120,
+      height: isAndroidCompact ? 78 : 120,
+      borderRadius: 999,
+      backgroundColor: "rgba(0, 209, 255, 0.9)",
+      justifyContent: "center",
+      alignItems: "center",
+      elevation: 10,
+      shadowColor: "#00D1FF",
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.6,
+      shadowRadius: 25,
+    },
+    lyricsSection: {
+      flex: 0,
+      width: isAndroidCompact ? "100%" : undefined,
+      alignSelf: isAndroidCompact ? "stretch" : undefined,
+      flexGrow: isAndroidCompact ? 0 : 1,
+      height: isAndroidCompact ? 220 : "90%",
+      backgroundColor: "rgba(255,255,255,0.05)",
+      borderRadius: 16,
+      paddingHorizontal: isAndroidCompact ? 12 : 20,
+    },
+    lyricText: {
+      fontSize: isAndroidCompact ? 14 : 18,
+      marginBottom: isAndroidCompact ? 14 : 24,
+      fontWeight: "500",
+    },
+    activeText: {
+      color: "#00D1FF",
+      fontSize: isAndroidCompact ? 18 : 24,
+      fontWeight: "800",
+    },
+    inactiveText: {
+      color: "#666",
+    },
+  });
+}

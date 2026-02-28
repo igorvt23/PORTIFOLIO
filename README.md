@@ -1,53 +1,61 @@
-# 🚀 Portfólio - Igor Viana Tomaz
+# Portfólio - Igor Viana Tomaz
 
-Bem-vindo ao repositório do meu portfólio pessoal! Este projeto foi desenvolvido para apresentar minha trajetória, habilidades e projetos como Desenvolvedor de Software.
+Portfólio pessoal desenvolvido com React Native + Expo, com suporte para Web e Mobile.
 
-A aplicação foi construída com foco em **Mobile First**, mas totalmente adaptada para **Web** (Responsivo), utilizando o poder do React Native.
+## Tecnologias
 
-## 📱 Tecnologias Utilizadas
+- React Native (Expo)
+- Expo Router
+- TypeScript
+- Context API (tema e idioma)
+- Expo AV
 
-* **React Native (Expo)**: Core da aplicação.
-* **Expo Web**: Para renderização no navegador.
-* **TypeScript**: Para tipagem estática e segurança do código.
-* **Context API**: Gerenciamento de estado global para:
-    * 🌐 **Internacionalização (i18n)**: Suporte a PT, EN e ES.
-    * 🌗 **Tema**: Alternância entre Dark Mode e Light Mode.
-* **Expo AV**: Player de vídeo personalizado com sincronização de legendas.
+## Funcionalidades
 
-## ✨ Funcionalidades
+- Layout responsivo para celular, tablet e desktop
+- Suporte a tema claro/escuro
+- Suporte a múltiplos idiomas (PT/EN/ES)
+- Carrossel de projetos e certificados
+- Visualização ampliada de certificados ao tocar na miniatura
 
-* **Apresentação em Vídeo Interativa**: O vídeo acompanha a transcrição em tempo real, com scroll automático da legenda.
-* **Multi-idioma**: Todo o conteúdo (texto e vídeo) se adapta ao idioma escolhido.
-* **Temas**: Design system adaptável para modos Claro e Escuro.
-* **Design Responsivo**: Layout fluido que funciona em Celulares, Tablets e Desktops.
+## Como rodar no PC
 
-## 🛠️ Como rodar o projeto localmente
+1. Instale as dependências:
+```bash
+npm install
+```
+2. Inicie o projeto:
+```bash
+npm run start
+```
+3. No terminal do Expo:
+- pressione `w` para abrir no navegador
+- pressione `a` para abrir Android (emulador)
+- pressione `i` para abrir iOS (simulador no macOS)
 
-1.  **Clone o repositório**
-    ```bash
-    git clone [https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git](https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git)
-    cd SEU_REPOSITORIO
-    ```
+## Como rodar no celular (Expo Go)
 
-2.  **Instale as dependências**
-    ```bash
-    npm install
-    # ou
-    yarn install
-    ```
+1. Instale o app `Expo Go` no seu celular.
+2. No PC, rode:
+```bash
+npm run start
+```
+3. Com o app Expo Go:
+- Android: escaneie o QR code que aparece no terminal
+- iPhone: abra a câmera e escaneie o QR code
 
-3.  **Execute o projeto**
-    ```bash
-    npx expo start
-    ```
-    * Pressione `w` para abrir no navegador.
-    * Pressione `a` para abrir no emulador Android.
-    * Pressione `i` para abrir no simulador iOS.
+## Se não conectar no celular
 
-## 📬 Contato
+- Garanta que PC e celular estejam na mesma rede Wi-Fi.
+- Se ainda falhar, rode com túnel:
+```bash
+npx expo start --tunnel
+```
 
-* **LinkedIn**: [https://www.linkedin.com/in/igor-viana-tomaz-080583238/]
-* **Email**: [igorvianat@gmail.com]
+## Scripts úteis
 
----
-Desenvolvido com ⚡ por Igor Viana Tomaz
+- `npm run start` inicia o Expo
+- `npm run web` abre versão web
+- `npm run android` abre no Android
+- `npm run ios` abre no iOS
+- `npm run lint` roda lint

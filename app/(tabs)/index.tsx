@@ -13,6 +13,7 @@ import {
   Text,
   TextStyle,
   TouchableOpacity,
+  useWindowDimensions,
   View,
   ViewStyle,
 } from "react-native";
@@ -131,6 +132,8 @@ export default function Home() {
   const styles = useAppStyles();
   const { t } = useLanguage();
   const { toggleTheme, isDarkMode } = useTheme();
+  const { width } = useWindowDimensions();
+  const isCompactHeader = width < 900;
 
   const scrollViewRef = useRef<ScrollView>(null);
   const sectionPositions = useRef<{ [key: string]: number }>({});
@@ -169,49 +172,95 @@ export default function Home() {
     >
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Text style={styles.viewHome}>
-            <TouchableOpacity onPress={scrollToTop}>
-              <Image source={homeImage} style={styles.logoHome} />
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <View style={styles.headerLeft}>
+            <Text style={styles.viewHome}>
+              <TouchableOpacity onPress={scrollToTop}>
+                <Image source={homeImage} style={styles.logoHome} />
+              </TouchableOpacity>
+            </Text>
+          </View>
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              style={styles.headerButtonsMode}
+              onPress={toggleTheme}
+            >
+              <Image source={iconMode} style={{ width: 32, height: 32 }} />
             </TouchableOpacity>
-          </Text>
+            <HeaderLanguageSelector />
+          </View>
         </View>
-        <View style={styles.headerCenter}>
-          <NavButton
-            title={t("projects")}
-            onPress={() => scrollToSection("projects")}
-            styleContainer={styles.headerButtons}
-            styleText={styles.textHeaderButtons}
-          />
-          <NavButton
-            title={t("about")}
-            onPress={() => scrollToSection("about")}
-            styleContainer={styles.headerButtons}
-            styleText={styles.textHeaderButtons}
-          />
-          <NavButton
-            title={t("certificates")}
-            onPress={() => scrollToSection("certificates")}
-            styleContainer={styles.headerButtons}
-            styleText={styles.textHeaderButtons}
-          />
-          <NavButton
-            title={t("contact")}
-            onPress={() => scrollToSection("contact")}
-            styleContainer={styles.headerButtons}
-            styleText={styles.textHeaderButtons}
-          />
-        </View>
-        <View style={styles.headerRight}>
-          <TouchableOpacity
-            style={styles.headerButtonsMode}
-            onPress={toggleTheme}
+        {isCompactHeader ? (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingRight: 8,
+              gap: 8,
+              alignItems: "center",
+            }}
+            style={{ width: "100%", marginTop: 8 }}
           >
-            <Image source={iconMode} style={{ width: 32, height: 32 }} />
-          </TouchableOpacity>
-
-          <HeaderLanguageSelector />
-        </View>
+            <NavButton
+              title={t("projects")}
+              onPress={() => scrollToSection("projects")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+            <NavButton
+              title={t("about")}
+              onPress={() => scrollToSection("about")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+            <NavButton
+              title={t("certificates")}
+              onPress={() => scrollToSection("certificates")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+            <NavButton
+              title={t("contact")}
+              onPress={() => scrollToSection("contact")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+          </ScrollView>
+        ) : (
+          <View style={styles.headerCenter}>
+            <NavButton
+              title={t("projects")}
+              onPress={() => scrollToSection("projects")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+            <NavButton
+              title={t("about")}
+              onPress={() => scrollToSection("about")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+            <NavButton
+              title={t("certificates")}
+              onPress={() => scrollToSection("certificates")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+            <NavButton
+              title={t("contact")}
+              onPress={() => scrollToSection("contact")}
+              styleContainer={styles.headerButtons}
+              styleText={styles.textHeaderButtons}
+            />
+          </View>
+        )}
       </View>
 
       {/* --- HERO SECTION  --- */}

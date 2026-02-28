@@ -6,6 +6,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { techs } from "../data/techs";
@@ -18,9 +19,21 @@ interface TechItemData {
 
 const INFINITE_TECHS = [...techs, ...techs, ...techs, ...techs];
 
-const ITEM_HEIGHT = 100;
-
 export const TechsCarousel = () => {
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 1200;
+  const containerHeight = isDesktop ? 240 : 300;
+  const itemSize = isDesktop ? 68 : 80;
+  const iconSize = isDesktop ? 42 : 50;
+  const itemMarginVertical = isDesktop ? 6 : 10;
+  const itemHeight = itemSize + itemMarginVertical * 2;
+  const styles = createStyles({
+    containerHeight,
+    itemSize,
+    iconSize,
+    itemMarginVertical,
+  });
+
   const listRef = useRef<FlatList>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -35,7 +48,7 @@ export const TechsCarousel = () => {
           const nextOffset = prevOffset + 1;
 
           // Correção: Usar "techs" aqui também
-          const originalListHeight = techs.length * ITEM_HEIGHT;
+          const originalListHeight = techs.length * itemHeight;
 
           if (nextOffset >= originalListHeight) {
             listRef.current?.scrollToOffset({ offset: 0, animated: false });
@@ -48,7 +61,7 @@ export const TechsCarousel = () => {
     }
 
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, itemHeight]);
 
   useEffect(() => {
     if (listRef.current) {
@@ -60,8 +73,8 @@ export const TechsCarousel = () => {
   }, [scrollOffset]);
 
   const getItemLayout = (_: any, index: number) => ({
-    length: ITEM_HEIGHT,
-    offset: ITEM_HEIGHT * index,
+    length: itemHeight,
+    offset: itemHeight * index,
     index,
   });
 
@@ -117,9 +130,20 @@ export const TechsCarousel = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = ({
+  containerHeight,
+  itemSize,
+  iconSize,
+  itemMarginVertical,
+}: {
+  containerHeight: number;
+  itemSize: number;
+  iconSize: number;
+  itemMarginVertical: number;
+}) =>
+  StyleSheet.create({
   carouselContainer: {
-    height: 300,
+    height: containerHeight,
     width: "100%",
     overflow: "hidden",
     alignItems: "center",
@@ -132,15 +156,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   itemContainer: {
-    height: 80,
-    width: 80,
-    marginVertical: 10, // Importante: 10+10+80 = 100 (ITEM_HEIGHT)
+    height: itemSize,
+    width: itemSize,
+    marginVertical: itemMarginVertical,
     alignItems: "center",
     justifyContent: "center",
   },
   icon: {
-    width: 50,
-    height: 50,
+    width: iconSize,
+    height: iconSize,
     opacity: 0.7,
   },
   iconHovered: {

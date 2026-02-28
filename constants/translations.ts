@@ -58,6 +58,8 @@ export const translations = {
     // CERTIFICATES
     university: 'Universidade',
     workload: 'Carga horária',
+    view_certificate: 'Abrir certificado',
+    close: 'Fechar',
 
     c1_title: 'Modelos, métodos e técnicas da engenharia de software',
     c2_title: 'Teoria da computação e compiladores',
@@ -113,6 +115,8 @@ export const translations = {
     // CERTIFICATES:
     university: 'University',
     workload: 'Workload',
+    view_certificate: 'Open certificate',
+    close: 'Close',
     c1_title: 'Software Engineering Models, Methods, and Techniques',
     c2_title: 'Computation Theory and Compilers',
     c3_title: 'Usability, Web, Mobile, and Game Development',
@@ -167,6 +171,8 @@ export const translations = {
     // CERTIFICATES
     university: 'Universidad',
     workload: 'Carga de trabajo',
+    view_certificate: 'Abrir certificado',
+    close: 'Cerrar',
     
     c1_title: 'Modelos, métodos y técnicas de ingeniería de software',
     c2_title: 'Teoría de la computación y compiladores',
