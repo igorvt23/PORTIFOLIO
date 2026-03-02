@@ -13,7 +13,7 @@ const getExperienceText = (lang: Language): string => {
 
     if (years < 1) years = 0; 
     
-    // Retorna o texto formatado por idioma
+    // Returns the formatted text by language
     if (lang === 'pt') return years <= 1 ? '1 ano' : `${years} anos`;
     if (lang === 'es') return years <= 1 ? '1 año' : `${years} años`;
     return years <= 1 ? '1 year' : `${years} years`;
@@ -30,6 +30,7 @@ export const translations = {
     projects: "Projetos",
     contact: "Contato",
     certificates: "Certificados",
+    select_language: "Selecione o idioma",
     compliments: "Olá, eu sou",
     career: "Desenvolvedor de Software",
     briefBiography: `Desenvolvedor web com ${ expPt } de experiência, focado em aprendizado constante e no desenvolvimento de soluções práticas e bem estruturadas.`,
@@ -87,6 +88,7 @@ export const translations = {
     projects: "Projects",
     contact: "Contact",
     certificates: "Certificates",
+    select_language: "Select language",
     compliments: "Hello, I'm",
     career: "Software Developer",
     briefBiography: `Web developer with ${expEn} of experience, focused on continuous learning and developing practical and well-structured solutions.`,
@@ -143,6 +145,7 @@ export const translations = {
     projects: "Proyectos",
     contact: "Contacto",
     certificates: "Certificados",
+    select_language: "Seleccionar idioma",
     compliments: "Hola, soy yo",
     career: "Desarrollador de Software",
     briefBiography: `Desarrollador web con ${expEs} de experiencia, enfocado en el aprendizaje continuo y desarrollo de soluciones prácticas y bien estructuradas.`,

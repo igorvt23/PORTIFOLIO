@@ -36,26 +36,26 @@ interface SocialButtonProps {
 interface NavButtonProps {
   title: string;
   onPress: () => void;
-  styleContainer?: StyleProp<ViewStyle>; // Ajuste a tipagem conforme necessário (ViewStyle)
-  styleText?: StyleProp<TextStyle>; // Ajuste a tipagem (TextStyle)
+  styleContainer?: StyleProp<ViewStyle>;
+  styleText?: StyleProp<TextStyle>;
 }
 
-// Componente para o botão animado
+// Animated social icon button.
 const SocialButton = ({ url, source, style }: SocialButtonProps) => {
-  // Valor inicial da escala (1 = tamanho normal)
+  // Initial scale value (1 = default size).
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
-  // Animar para aumentar (Escala 1.2)
+  // Scale up on hover/press.
   const animateIn = () => {
     Animated.timing(scaleAnim, {
       toValue: 1.2,
-      duration: 300, // 0.3s transition
+      duration: 300,
       useNativeDriver: true,
       easing: Easing.out(Easing.ease),
     }).start();
   };
 
-  // Animar para voltar ao normal (Escala 1)
+  // Scale back to normal.
   const animateOut = () => {
     Animated.timing(scaleAnim, {
       toValue: 1,
@@ -68,17 +68,18 @@ const SocialButton = ({ url, source, style }: SocialButtonProps) => {
   return (
     <Pressable
       onPress={() => Linking.openURL(url)}
-      onHoverIn={animateIn} // Funciona na Web
-      onHoverOut={animateOut} // Funciona na Web
-      onPressIn={animateIn} // Funciona no Mobile (toque)
-      onPressOut={animateOut} // Funciona no Mobile (soltar)
-      style={{ marginHorizontal: 5 }} // Espacinho extra se precisar
+      onHoverIn={animateIn} // Web
+      onHoverOut={animateOut} // Web
+      onPressIn={animateIn} // Mobile (press)
+      onPressOut={animateOut} // Mobile (release)
+      style={{ marginHorizontal: 5 }}
     >
       <Animated.Image
         source={source}
         style={[
+          { width: 28, height: 28, resizeMode: "contain" },
           style,
-          { transform: [{ scale: scaleAnim }] }, // Aplica a animação
+          { transform: [{ scale: scaleAnim }] }, // Apply scale animation.
         ]}
       />
     </Pressable>
@@ -95,7 +96,7 @@ const NavButton = ({
 
   const animateIn = () => {
     Animated.timing(scaleAnim, {
-      toValue: 1.1, // Aumenta 10%
+      toValue: 1.1,
       duration: 200,
       useNativeDriver: true,
       easing: Easing.out(Easing.ease),
@@ -152,7 +153,7 @@ export default function Home() {
       return;
     }
     if (y !== undefined && scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({ y: y, animated: true });
+      scrollViewRef.current.scrollTo({ y, animated: true });
     }
   };
 
@@ -164,6 +165,35 @@ export default function Home() {
     sectionPositions.current[section] = event.nativeEvent.layout.y;
   };
 
+  const renderNavButtons = () => (
+    <>
+      <NavButton
+        title={t("projects")}
+        onPress={() => scrollToSection("projects")}
+        styleContainer={styles.headerButtons}
+        styleText={styles.textHeaderButtons}
+      />
+      <NavButton
+        title={t("about")}
+        onPress={() => scrollToSection("about")}
+        styleContainer={styles.headerButtons}
+        styleText={styles.textHeaderButtons}
+      />
+      <NavButton
+        title={t("certificates")}
+        onPress={() => scrollToSection("certificates")}
+        styleContainer={styles.headerButtons}
+        styleText={styles.textHeaderButtons}
+      />
+      <NavButton
+        title={t("contact")}
+        onPress={() => scrollToSection("contact")}
+        styleContainer={styles.headerButtons}
+        styleText={styles.textHeaderButtons}
+      />
+    </>
+  );
+
   return (
     <ScrollView
       ref={scrollViewRef}
@@ -172,14 +202,7 @@ export default function Home() {
     >
       {/* Header */}
       <View style={styles.header}>
-        <View
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.headerTopRow}>
           <View style={styles.headerLeft}>
             <Text style={styles.viewHome}>
               <TouchableOpacity onPress={scrollToTop}>
@@ -187,6 +210,7 @@ export default function Home() {
               </TouchableOpacity>
             </Text>
           </View>
+          {!isCompactHeader && <View style={styles.headerCenter}>{renderNavButtons()}</View>}
           <View style={styles.headerRight}>
             <TouchableOpacity
               style={styles.headerButtonsMode}
@@ -197,76 +221,25 @@ export default function Home() {
             <HeaderLanguageSelector />
           </View>
         </View>
-        {isCompactHeader ? (
+        {isCompactHeader && (
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
-              paddingRight: 8,
+              paddingHorizontal: 4,
               gap: 8,
               alignItems: "center",
             }}
-            style={{ width: "100%", marginTop: 8 }}
+            style={styles.headerCompactNav}
           >
-            <NavButton
-              title={t("projects")}
-              onPress={() => scrollToSection("projects")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
-            <NavButton
-              title={t("about")}
-              onPress={() => scrollToSection("about")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
-            <NavButton
-              title={t("certificates")}
-              onPress={() => scrollToSection("certificates")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
-            <NavButton
-              title={t("contact")}
-              onPress={() => scrollToSection("contact")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
+            {renderNavButtons()}
           </ScrollView>
-        ) : (
-          <View style={styles.headerCenter}>
-            <NavButton
-              title={t("projects")}
-              onPress={() => scrollToSection("projects")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
-            <NavButton
-              title={t("about")}
-              onPress={() => scrollToSection("about")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
-            <NavButton
-              title={t("certificates")}
-              onPress={() => scrollToSection("certificates")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
-            <NavButton
-              title={t("contact")}
-              onPress={() => scrollToSection("contact")}
-              styleContainer={styles.headerButtons}
-              styleText={styles.textHeaderButtons}
-            />
-          </View>
         )}
       </View>
 
-      {/* --- HERO SECTION  --- */}
-      <View style={styles.inicialContainer}>
-        <View style={styles.textInicialContainer}>
-          {/* Aplicação dos novos estilos de texto */}
+      {/* Hero section */}
+      <View style={styles.initialContainer}>
+        <View style={styles.textInitialContainer}>
           <Text style={styles.heroGreeting}>{t("compliments")}</Text>
           <Text style={styles.heroName}>Igor Viana Tomaz</Text>
           <Text style={styles.heroCareer}>{t("career")}</Text>
@@ -282,7 +255,7 @@ export default function Home() {
 
       <View style={styles.hr} />
 
-      {/* --- CARROSSEL DE PROJETOS --- */}
+      {/* Projects carousel */}
       <View onLayout={(e) => handleLayout("projects", e)}>
         <ProjectsCarousel />
       </View>
@@ -295,14 +268,14 @@ export default function Home() {
       >
         <Text style={styles.sectionTitle}>{t("about")}</Text>
 
-        {/* CONTAINER MESTRE - 3 COLUNAS */}
+        {/* Main container - 3 columns */}
         <View style={styles.aboutContainer}>
-          {/* 1. ESQUERDA: Carrossel de Tecnologias */}
+          {/* Left column: technologies carousel */}
           <View style={styles.columnLeft}>
             <TechsCarousel />
           </View>
 
-          {/* 2 & 3. MEIO E DIREITA: O Componente de Vídeo já contem as duas colunas */}
+          {/* Middle + right columns: video presentation */}
           <View style={styles.columnRightGroup}>
             <VideoPresentation />
           </View>
@@ -311,16 +284,14 @@ export default function Home() {
 
       <View style={styles.hr} />
 
-      {/* --- CARROSSEL DE PROJETOS --- */}
+      {/* Certificates carousel */}
       <View onLayout={(e) => handleLayout("certificates", e)}>
         <CertificatesCarousel />
       </View>
 
-      {/* <View style={styles.hr} /> */}
-
-      {/* Espaço extra no final para rolagem */}
+      {/* Footer */}
       <View style={styles.footer} onLayout={(e) => handleLayout("contact", e)}>
-        {/* ESQUERDA: Apenas a imagem da Home */}
+        {/* Left: Home image and short bio */}
         <View style={styles.footerLeft}>
           <TouchableOpacity onPress={scrollToTop}>
             <Image source={homeImage} style={styles.logoHome} />
@@ -328,7 +299,7 @@ export default function Home() {
           <Text style={styles.briefBiography}>{t("briefBiography")}</Text>
         </View>
 
-        {/* CENTRO: Botões (Iguais ao Header) */}
+        {/* Center: same navigation buttons as header */}
         <View style={styles.footerCenter}>
           <NavButton
             title={t("projects")}
@@ -356,23 +327,23 @@ export default function Home() {
           />
         </View>
 
-        {/* DIREITA: Ícones em COLUNA */}
+        {/* Right: social icons column */}
         <View style={styles.footerRight}>
           <View style={styles.contactButtons}>
             <SocialButton
               url="https://github.com/igorvt23"
               source={require("@/assets/images/socials/github.png")}
-              style={styles.socialMedias}
+              style={styles.socialMediaIcons}
             />
             <SocialButton
               url="https://www.linkedin.com/in/igor-viana-tomaz-080583238"
               source={require("@/assets/images/socials/linkedin.png")}
-              style={styles.socialMedias}
+              style={styles.socialMediaIcons}
             />
             <SocialButton
               url="https://www.instagram.com/_hey.igors/"
               source={require("@/assets/images/socials/instagram.png")}
-              style={styles.socialMedias}
+              style={styles.socialMediaIcons}
             />
           </View>
         </View>

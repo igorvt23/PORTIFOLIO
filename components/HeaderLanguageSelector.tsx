@@ -1,15 +1,16 @@
 import { useLanguage } from '@/context/LanguageContext';
-import { useTheme } from '@/context/ThemeContext'; // Para ajustar cores do modal
+import { useTheme } from '@/context/ThemeContext'; // Modal selected option contrast
 import { useAppStyles } from '@/hooks/useAppStyles';
 import React, { useState } from 'react';
 import { FlatList, Image, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Language } from '@/constants/translations';
 
-// Usando links diretos para bandeiras de alta qualidade (FlatIcon/CDN)
+// Using direct high-quality flag URLs (FlatIcon/CDN)
 const languages = [
     { 
         code: 'pt', 
         label: 'Português', 
-        // Link direto para teste. Depois você pode baixar e usar require('@/assets/br.png')
+        // Direct URL for testing; can be replaced by local assets later.
         flag: 'https://cdn-icons-png.flaticon.com/512/197/197386.png' 
     },
     { 
@@ -25,30 +26,30 @@ const languages = [
 ];
 
 export function HeaderLanguageSelector() {
-    const { language, setLanguage } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
     const styles = useAppStyles();
-    const { isDarkMode } = useTheme(); // Para ícones condicionais
+    const { isDarkMode } = useTheme(); // For selected option highlight
     const [modalVisible, setModalVisible] = useState(false);
 
-    const currentLang = languages.find(l => l.code === language) || languages[0];
+    const currentLanguage = languages.find((lang) => lang.code === language) || languages[0];
 
-    const handleSelect = (code: string) => {
-        setLanguage(code as any);
+    const handleSelect = (code: Language) => {
+        setLanguage(code);
         setModalVisible(false);
     };
 
     return (
         <>
-            {/* Botão do Header */}
+            {/* Header button */}
             <TouchableOpacity 
                 style={styles.langSelectorBtn} 
                 onPress={() => setModalVisible(true)}
             >
                 <Image 
-                    source={{ uri: currentLang.flag }} 
+                    source={{ uri: currentLanguage.flag }} 
                     style={{ width: 24, height: 24, borderRadius: 12 }} 
                 />
-                <Text style={styles.textHeaderButtons}>{currentLang.code.toUpperCase()}</Text>
+                <Text style={styles.textHeaderButtons}>{currentLanguage.code.toUpperCase()}</Text>
             </TouchableOpacity>
 
             {/* Modal */}
@@ -65,7 +66,7 @@ export function HeaderLanguageSelector() {
                 >
                     <View style={styles.languageModal}>
                         <Text style={[styles.text, { marginBottom: 20, fontWeight: 'bold', fontSize: 18 }]}>
-                            {language === 'pt' ? 'Selecione o Idioma' : 'Select Language'}
+                            {t('select_language')}
                         </Text>
                         
                         <FlatList
@@ -75,9 +76,9 @@ export function HeaderLanguageSelector() {
                                 <TouchableOpacity 
                                     style={[
                                         styles.languageOption, 
-                                        language === item.code && { backgroundColor: isDarkMode ? '#333' : '#f0f0f0' } // Destaque se selecionado
+                                        language === item.code && { backgroundColor: isDarkMode ? '#333' : '#f0f0f0' } // Highlight selected option
                                     ]}
-                                    onPress={() => handleSelect(item.code)}
+                                    onPress={() => handleSelect(item.code as Language)}
                                 >
                                     <Image 
                                         source={{ uri: item.flag }} 

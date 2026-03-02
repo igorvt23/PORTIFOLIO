@@ -13,7 +13,7 @@ const ThemeContext = createContext<ThemeContextProps>({} as ThemeContextProps);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const systemScheme = useColorScheme();
-    // Inicia com o tema do sistema ou light por padrão
+    // Start with the system theme, fallback to light
     const [theme, setTheme] = useState<ThemeType>(systemScheme === 'dark' ? 'dark' : 'light');
 
     const toggleTheme = () => {

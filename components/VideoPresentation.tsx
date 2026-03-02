@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 
-// --- DADOS ---
+// Transcript data
 const TRANSCRIPTS = {
   pt: [
     { time: 0, text: "Olá, meu nome é Igor Viana Tomaz," },
@@ -305,7 +305,7 @@ export const VideoPresentation = () => {
 
   return (
     <View style={styles.container}>
-      {/* SEÇÃO DO VÍDEO GIGANTE */}
+      {/* Video section */}
       <View style={styles.videoSection}>
         <Video
           ref={videoRef}
@@ -316,7 +316,7 @@ export const VideoPresentation = () => {
                   // @ts-ignore
                   objectFit: "contain",
                   // @ts-ignore
-                  objectPosition: "center", // Centraliza o rosto
+                  objectPosition: "center", // Keep focus centered
                 }
               : {},
           ]}
@@ -345,7 +345,7 @@ export const VideoPresentation = () => {
         )}
       </View>
 
-      {/* SEÇÃO DA LEGENDA */}
+      {/* Transcript section */}
       <View style={styles.lyricsSection}>
         <FlatList
           ref={listRef}

@@ -1,5 +1,5 @@
 import { useLanguage } from "@/context/LanguageContext";
-import { projects } from "@/data/projects"; // IMPORTANTE: Certifique-se que o caminho está certo
+import { projects } from "@/data/projects";
 import React, { useEffect, useRef, useState } from "react";
 import {
     Dimensions,
@@ -13,14 +13,14 @@ import {
     View,
 } from "react-native";
 
-// --- CONFIGURAÇÕES DO CARROSSEL ---
+// Carousel configuration
 const { width, height } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.75;
 const CARD_HEIGHT = height * 0.4;
 const SPACING = 20;
 const SNAP_INTERVAL = CARD_WIDTH + SPACING;
 
-// --- ÍCONES ---
+// Icons
 const techIcons: Record<string, any> = {
   Python: require("@/assets/images/techs/python.png"),
   Java: require("@/assets/images/techs/java.png"),
@@ -32,7 +32,7 @@ const techIcons: Record<string, any> = {
   default: require("@/assets/images/techs/code.png"),
 };
 
-// --- COMPONENTE CARD ---
+// Card component
 const ProjectCard = ({ item, t }: { item: any; t: any }) => {
   const handleOpenLink = () => {
     if (item.link) Linking.openURL(item.link);
@@ -41,12 +41,12 @@ const ProjectCard = ({ item, t }: { item: any; t: any }) => {
   return (
     <Pressable
       onPress={handleOpenLink}
-      // Removidos os onHoverIn/Out e onLongPress
+      // Hover/long-press handlers intentionally omitted.
       style={({ pressed }) => [
         styles.cardContainer,
         {
           backgroundColor: item.backgroundColor,
-          // Mantive apenas o efeito de clique (pressed)
+          // Keep press feedback only.
           transform: [{ scale: pressed ? 1.02 : 1 }],
         },
       ]}
@@ -69,7 +69,7 @@ const ProjectCard = ({ item, t }: { item: any; t: any }) => {
           </Text>
         </View>
 
-        {/* DESCRIÇÃO AGORA SEMPRE VISÍVEL */}
+        {/* Description is always visible */}
         <View style={styles.descContainer}>
           <Text
             numberOfLines={3}
@@ -161,7 +161,7 @@ export function ProjectsCarousel() {
 
         <FlatList
           ref={flatListRef}
-          data={projects} // Usa os dados importados corretamente
+          data={projects}
           renderItem={({ item }) => <ProjectCard item={item} t={t} />}
           keyExtractor={(item) => item.id.toString()}
           horizontal
@@ -200,7 +200,7 @@ export function ProjectsCarousel() {
   );
 }
 
-// --- ESTILOS ---
+// Styles
 const styles = StyleSheet.create({
   sectionContainer: { marginTop: 30, marginBottom: 20 },
   sectionTitle: {
@@ -225,15 +225,15 @@ const styles = StyleSheet.create({
   },
   projectImage: { width: "100%", height: "45%" },
   cardContent: { padding: 20, flex: 1, justifyContent: "space-between" },
-  projectTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 2 }, // Reduzi margem bottom
+  projectTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 2 },
   projectYear: { fontSize: 12, marginBottom: 5 },
 
-  // Novo estilo para o container da descrição
+  // Description container
   descContainer: {
     marginVertical: 5,
-    flexGrow: 1, // Ajuda a ocupar o espaço disponível se necessário
+    flexGrow: 1,
   },
-  projectDesc: { fontSize: 13, lineHeight: 18 }, // Ajustei levemente fonte/linha para caber melhor
+  projectDesc: { fontSize: 13, lineHeight: 18 },
 
   techContainer: { flexDirection: "row", flexWrap: "wrap", marginBottom: 10 },
   techIconWrapper: {
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginBottom: 8,
   },
-  techIcon: { width: 16, height: 16, resizeMode: "contain" }, // Reduzi um pouco os ícones para ganhar espaço
+  techIcon: { width: 16, height: 16, resizeMode: "contain" },
   buttonRow: { flexDirection: "row", justifyContent: "flex-end" },
   linkText: {
     fontWeight: "bold",

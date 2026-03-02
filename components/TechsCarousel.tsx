@@ -47,7 +47,7 @@ export const TechsCarousel = () => {
         setScrollOffset((prevOffset) => {
           const nextOffset = prevOffset + 1;
 
-          // Correção: Usar "techs" aqui também
+          // Keep the source list length aligned with the original tech array.
           const originalListHeight = techs.length * itemHeight;
 
           if (nextOffset >= originalListHeight) {

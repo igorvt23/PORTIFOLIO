@@ -13,6 +13,7 @@ export const useAppStyles = () => {
   const isMobile = width < 768;
   const isSmallMobile = width < 430;
   const isDesktop = width >= 1200;
+  const isLargeDesktop = width >= 1600;
 
   const colors = {
     headerBackground: isDarkMode ? "#052659" : "#33bffd",
@@ -47,9 +48,9 @@ export const useAppStyles = () => {
     },
 
     header: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "stretch",
       width: "100%",
       height: isMobile ? undefined : Platform.OS === "ios" ? 100 : 80,
       minHeight: Platform.OS === "ios" ? (isMobile ? 98 : 100) : isMobile ? 90 : 80,
@@ -69,6 +70,15 @@ export const useAppStyles = () => {
       shadowRadius: 4,
       zIndex: 10,
     },
+    headerTopRow: {
+      width: "100%",
+      maxWidth: 1400,
+      alignSelf: "center",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingHorizontal: isMobile ? 0 : isLargeDesktop ? 18 : 8,
+    },
     headerLeft: {
       justifyContent: "flex-start",
       flex: 0,
@@ -81,7 +91,10 @@ export const useAppStyles = () => {
       alignItems: "center",
       flexWrap: "nowrap",
       gap: isMobile ? 6 : 10,
-      width: isMobile ? "100%" : undefined,
+      width: "100%",
+      maxWidth: 1400,
+      alignSelf: "center",
+      paddingHorizontal: isMobile ? 0 : isLargeDesktop ? 18 : 8,
       marginTop: isMobile ? 8 : 0,
     },
     headerRight: {
@@ -89,7 +102,7 @@ export const useAppStyles = () => {
       justifyContent: "flex-end",
       alignItems: "center",
       flex: 0,
-      gap: 8,
+      gap: isMobile ? 8 : 12,
       width: isMobile ? "auto" : undefined,
     },
     headerButtons: {
@@ -101,7 +114,7 @@ export const useAppStyles = () => {
       backgroundColor: isDarkMode ? "rgba(51,191,253,0.12)" : "rgba(5,38,89,0.1)",
       justifyContent: "center",
       alignItems: "center",
-      marginLeft: isMobile ? 0 : 8,
+      marginLeft: 0,
       cursor: "pointer",
     },
     modalOverlay: {
@@ -150,7 +163,14 @@ export const useAppStyles = () => {
       width: isMobile ? 32 : 35,
       justifyContent: "center",
       alignItems: "center",
-      marginLeft: 8,
+      marginLeft: 0,
+    },
+    headerCompactNav: {
+      width: "100%",
+      maxWidth: 1400,
+      alignSelf: "center",
+      marginTop: 8,
+      paddingHorizontal: isMobile ? 0 : isLargeDesktop ? 18 : 8,
     },
     textHeaderButtons: {
       color: colors.text,
@@ -165,19 +185,20 @@ export const useAppStyles = () => {
       width: isMobile ? 130 : 160,
     },
 
-    inicialContainer: {
+    initialContainer: {
       width: "100%",
-      maxWidth: 1200,
+      maxWidth: 1400,
       paddingVertical: isMobile ? 24 : 40,
-      paddingHorizontal: isMobile ? 14 : 20,
+      paddingHorizontal: isMobile ? 14 : 28,
       alignSelf: "center",
       flexDirection: isMobile ? "column" : "row",
-      justifyContent: "space-between",
+      justifyContent: "center",
       alignItems: "center",
-      gap: isMobile ? 12 : 20,
+      gap: isMobile ? 12 : isLargeDesktop ? 72 : 36,
+      minHeight: isMobile ? undefined : 420,
     },
     photoContainer: {
-      marginBottom: 25,
+      marginBottom: isMobile ? 25 : 0,
       elevation: 15,
       shadowColor: colors.accent,
       shadowOffset: { width: 0, height: 4 },
@@ -187,14 +208,29 @@ export const useAppStyles = () => {
       height: "auto",
     },
     reactLogo: {
-      width: isMobile ? Math.min(width * 0.72, 300) : 600,
-      height: isMobile ? Math.min(width * 0.72, 300) : 600,
+      width: isMobile
+        ? Math.min(width * 0.72, 300)
+        : isLargeDesktop
+          ? 420
+          : isDesktop
+            ? 360
+            : 300,
+      height: isMobile
+        ? Math.min(width * 0.72, 300)
+        : isLargeDesktop
+          ? 420
+          : isDesktop
+            ? 360
+            : 300,
       borderRadius: 40,
       borderWidth: 3,
       borderColor: colors.accent,
     },
-    textInicialContainer: {
-      alignItems: "center",
+    textInitialContainer: {
+      flex: isMobile ? 0 : 1,
+      maxWidth: isMobile ? "100%" : 560,
+      alignItems: isMobile ? "center" : "flex-start",
+      justifyContent: "center",
     },
     heroGreeting: {
       fontSize: 16,
@@ -205,34 +241,37 @@ export const useAppStyles = () => {
       marginBottom: 10,
     },
     heroName: {
-      fontSize: isMobile ? 28 : 32,
+      fontSize: isMobile ? 28 : isLargeDesktop ? 54 : 44,
       fontWeight: "900",
       color: colors.text,
-      textAlign: "center",
+      textAlign: isMobile ? "center" : "left",
       marginBottom: 5,
+      lineHeight: isMobile ? 34 : isLargeDesktop ? 60 : 50,
     },
     heroCareer: {
-      fontSize: isMobile ? 17 : 20,
+      fontSize: isMobile ? 17 : isLargeDesktop ? 28 : 22,
       fontWeight: "600",
       color: colors.subText,
-      textAlign: "center",
+      textAlign: isMobile ? "center" : "left",
     },
 
     footer: {
       minHeight: isMobile ? 220 : 150,
       backgroundColor: colors.headerBackground,
       flexDirection: isMobile ? "column" : "row",
-      paddingHorizontal: 20,
+      width: "100%",
+      paddingHorizontal: isMobile ? 20 : 28,
       paddingVertical: isMobile ? 16 : 0,
       alignItems: "center",
     },
     footerLeft: {
-      flex: isMobile ? 0 : 3,
+      flex: isMobile ? 0 : 2,
       justifyContent: "center",
       alignItems: isMobile ? "center" : "flex-start",
+      maxWidth: isMobile ? "100%" : 460,
     },
     footerCenter: {
-      flex: isMobile ? 0 : 4,
+      flex: isMobile ? 0 : 1,
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
@@ -241,9 +280,10 @@ export const useAppStyles = () => {
       marginVertical: isMobile ? 12 : 0,
     },
     footerRight: {
-      flex: isMobile ? 0 : 1,
+      flex: isMobile ? 0 : 0,
       justifyContent: "center",
       alignItems: isMobile ? "center" : "flex-end",
+      minWidth: isMobile ? undefined : 64,
     },
     contactButtons: {
       flexDirection: "column",
@@ -255,7 +295,7 @@ export const useAppStyles = () => {
       color: colors.text,
       textAlign: isMobile ? "center" : "left",
     },
-    socialMedias: {
+    socialMediaIcons: {
       width: 28,
       height: 28,
       resizeMode: "contain",
