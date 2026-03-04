@@ -3,7 +3,7 @@
 Portfólio pessoal desenvolvido com React Native + Expo, com suporte para Web e Mobile.
 
 <div align="center">
-  <img src="./assets/images/readme/home_dark.png" alt="Preview do App" width="100%">
+  <img src="./assets/images/projects/project07.png" alt="Preview do App" width="100%">
   <br><br>
   <a href="https://igor-viana-portifolio.vercel.app/">CLIQUE AQUI PARA ACESSAR O PORTFÓLIO ONLINE</a>
   <br>

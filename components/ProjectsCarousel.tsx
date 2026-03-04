@@ -2,7 +2,6 @@ import { useLanguage } from "@/context/LanguageContext";
 import { projects } from "@/data/projects";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Dimensions,
     FlatList,
     Image,
     Linking,
@@ -10,30 +9,44 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
+    useWindowDimensions,
     View,
 } from "react-native";
-
-// Carousel configuration
-const { width, height } = Dimensions.get("window");
-const CARD_WIDTH = width * 0.75;
-const CARD_HEIGHT = height * 0.4;
-const SPACING = 20;
-const SNAP_INTERVAL = CARD_WIDTH + SPACING;
 
 // Icons
 const techIcons: Record<string, any> = {
   Python: require("@/assets/images/techs/python.png"),
+  Pygame: require("@/assets/images/techs/pygame.png"),
+  NumPy: require("@/assets/images/techs/numpy.png"),
+  Blender: require("@/assets/images/techs/blender.png"),
+  JUnit: require("@/assets/images/techs/JUnit.png"),
   Java: require("@/assets/images/techs/java.png"),
   JavaScript: require("@/assets/images/techs/js.png"),
   HTML: require("@/assets/images/techs/html.png"),
   CSS: require("@/assets/images/techs/css.png"),
   "React Native": require("@/assets/images/techs/react.png"),
   Git: require("@/assets/images/techs/git.png"),
+  React: require("@/assets/images/techs/react.png"),
+  Expo: require("@/assets/images/techs/expo.png"),
+  Typescript: require("@/assets/images/techs/typescript.png"),
+  ChatGpt: require("@/assets/images/techs/gpt.png"),
   default: require("@/assets/images/techs/code.png"),
 };
 
 // Card component
-const ProjectCard = ({ item, t }: { item: any; t: any }) => {
+const ProjectCard = ({
+  item,
+  t,
+  styles,
+  cardWidth,
+  cardHeight,
+}: {
+  item: any;
+  t: any;
+  styles: ReturnType<typeof createStyles>;
+  cardWidth: number;
+  cardHeight: number;
+}) => {
   const handleOpenLink = () => {
     if (item.link) Linking.openURL(item.link);
   };
@@ -45,6 +58,8 @@ const ProjectCard = ({ item, t }: { item: any; t: any }) => {
       style={({ pressed }) => [
         styles.cardContainer,
         {
+          width: cardWidth,
+          height: cardHeight,
           backgroundColor: item.backgroundColor,
           // Keep press feedback only.
           transform: [{ scale: pressed ? 1.02 : 1 }],
@@ -102,6 +117,14 @@ const ProjectCard = ({ item, t }: { item: any; t: any }) => {
 
 export function ProjectsCarousel() {
   const { t } = useLanguage();
+  const { width, height } = useWindowDimensions();
+  const isMobile = width < 768;
+  const CARD_WIDTH = isMobile ? width * 0.82 : width * 0.75;
+  const CARD_HEIGHT = isMobile ? Math.min(height * 0.52, 470) : height * 0.4;
+  const SPACING = isMobile ? 12 : 20;
+  const SNAP_INTERVAL = CARD_WIDTH + SPACING;
+  const styles = createStyles(isMobile);
+
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
@@ -162,7 +185,15 @@ export function ProjectsCarousel() {
         <FlatList
           ref={flatListRef}
           data={projects}
-          renderItem={({ item }) => <ProjectCard item={item} t={t} />}
+          renderItem={({ item }) => (
+            <ProjectCard
+              item={item}
+              t={t}
+              styles={styles}
+              cardWidth={CARD_WIDTH}
+              cardHeight={CARD_HEIGHT}
+            />
+          )}
           keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -201,7 +232,8 @@ export function ProjectsCarousel() {
 }
 
 // Styles
-const styles = StyleSheet.create({
+const createStyles = (isMobile: boolean) =>
+  StyleSheet.create({
   sectionContainer: { marginTop: 30, marginBottom: 20 },
   sectionTitle: {
     fontSize: 22,
@@ -213,8 +245,6 @@ const styles = StyleSheet.create({
   },
   carouselWrapper: { position: "relative", justifyContent: "center" },
   cardContainer: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     borderRadius: 20,
     overflow: "hidden",
     elevation: 5,
@@ -224,8 +254,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   projectImage: { width: "100%", height: "45%" },
-  cardContent: { padding: 20, flex: 1, justifyContent: "space-between" },
-  projectTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 2 },
+  cardContent: { padding: isMobile ? 14 : 20, flex: 1, justifyContent: "space-between" },
+  projectTitle: { fontSize: isMobile ? 16 : 18, fontWeight: "bold", marginBottom: 2 },
   projectYear: { fontSize: 12, marginBottom: 5 },
 
   // Description container
@@ -233,7 +263,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     flexGrow: 1,
   },
-  projectDesc: { fontSize: 13, lineHeight: 18 },
+  projectDesc: { fontSize: isMobile ? 12 : 13, lineHeight: isMobile ? 17 : 18 },
 
   techContainer: { flexDirection: "row", flexWrap: "wrap", marginBottom: 10 },
   techIconWrapper: {
@@ -247,7 +277,7 @@ const styles = StyleSheet.create({
   buttonRow: { flexDirection: "row", justifyContent: "flex-end" },
   linkText: {
     fontWeight: "bold",
-    fontSize: 13,
+    fontSize: isMobile ? 12 : 13,
     backgroundColor: "rgba(255,255,255,0.2)",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.35)",
@@ -263,20 +293,20 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(5, 38, 89, 0.85)",
     borderWidth: 1,
     borderColor: "#33bffd",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: isMobile ? 34 : 40,
+    height: isMobile ? 34 : 40,
+    borderRadius: isMobile ? 17 : 20,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: -20,
+    marginTop: isMobile ? -17 : -20,
   },
-  arrowLeft: { left: 15 },
-  arrowRight: { right: 15 },
+  arrowLeft: { left: isMobile ? 8 : 15 },
+  arrowRight: { right: isMobile ? 8 : 15 },
   arrowText: {
     color: "#fff",
-    fontSize: 30,
+    fontSize: isMobile ? 26 : 30,
     fontWeight: "bold",
-    lineHeight: 32,
-    marginTop: -4,
+    lineHeight: isMobile ? 28 : 32,
+    marginTop: isMobile ? -3 : -4,
   },
 });

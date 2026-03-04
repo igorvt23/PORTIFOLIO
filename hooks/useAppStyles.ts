@@ -78,6 +78,7 @@ export const useAppStyles = () => {
       justifyContent: "space-between",
       alignItems: "center",
       paddingHorizontal: isMobile ? 0 : isLargeDesktop ? 18 : 8,
+      gap: isMobile ? 8 : 0,
     },
     headerLeft: {
       justifyContent: "flex-start",
@@ -104,6 +105,7 @@ export const useAppStyles = () => {
       flex: 0,
       gap: isMobile ? 8 : 12,
       width: isMobile ? "auto" : undefined,
+      flexShrink: 0,
     },
     headerButtons: {
       paddingVertical: isMobile ? 5 : 6,
@@ -169,8 +171,9 @@ export const useAppStyles = () => {
       width: "100%",
       maxWidth: 1400,
       alignSelf: "center",
-      marginTop: 8,
+      marginTop: 6,
       paddingHorizontal: isMobile ? 0 : isLargeDesktop ? 18 : 8,
+      paddingBottom: 2,
     },
     textHeaderButtons: {
       color: colors.text,
@@ -178,11 +181,12 @@ export const useAppStyles = () => {
       fontSize: isSmallMobile ? 11 : 12,
     },
     viewHome: {
+      alignSelf: "center",
       justifyContent: "center",
     },
     logoHome: {
       height: isMobile ? 34 : 40,
-      width: isMobile ? 130 : 160,
+      width: isSmallMobile ? 116 : isMobile ? 130 : 160,
     },
 
     initialContainer: {
@@ -261,7 +265,7 @@ export const useAppStyles = () => {
       flexDirection: isMobile ? "column" : "row",
       width: "100%",
       paddingHorizontal: isMobile ? 20 : 28,
-      paddingVertical: isMobile ? 16 : 0,
+      paddingVertical: isMobile ? 18 : 0,
       alignItems: "center",
     },
     footerLeft: {
@@ -275,15 +279,17 @@ export const useAppStyles = () => {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      gap: 10,
+      gap: isMobile ? 8 : 10,
       flexWrap: "wrap",
       marginVertical: isMobile ? 12 : 0,
+      width: isMobile ? "100%" : undefined,
     },
     footerRight: {
       flex: isMobile ? 0 : 0,
       justifyContent: "center",
       alignItems: isMobile ? "center" : "flex-end",
       minWidth: isMobile ? undefined : 64,
+      marginTop: isMobile ? 6 : 0,
     },
     contactButtons: {
       flexDirection: "column",
@@ -317,8 +323,10 @@ export const useAppStyles = () => {
       gap: isMobile ? 16 : 0,
     },
     columnLeft: {
-      width: isMobile ? "100%" : isDesktop ? 84 : 100,
+      width: isMobile ? "auto" : isDesktop ? 84 : 100,
       marginRight: isMobile ? 0 : 10,
+      alignItems: "center",
+      alignSelf: "center",
     },
     columnRightGroup: {
       flex: 1,

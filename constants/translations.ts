@@ -56,6 +56,9 @@ export const translations = {
     p6_title: 'Projeto The Last Of Us',
     p6_desc: 'Feito com base no curso do Dev em dobro.',
 
+    p7_title: 'Portifólio',
+    p7_desc: 'Este portfólio foi desenvolvido manualmente por mim, com apoio de ferramentas de inteligência artificial, incluindo o ChatGPT, utilizadas como suporte no processo de desenvolvimento e aprimoramento das soluções.',
+
     // CERTIFICATES
     university: 'Universidade',
     workload: 'Carga horária',
@@ -114,6 +117,10 @@ export const translations = {
     p6_title: 'The Last Of Us Project',
     p6_desc: 'Based on the Dev em dobro course.',
 
+    
+    p7_title: 'Portfolio',
+    p7_desc: 'This portfolio was developed manually by me, with the support of artificial intelligence tools, including ChatGPT, used to support the process of developing and improving the solutions.',
+
     // CERTIFICATES:
     university: 'University',
     workload: 'Workload',
@@ -170,6 +177,10 @@ export const translations = {
 
     p6_title: 'Proyecto The Last Of Us',
     p6_desc: 'Basado en el curso Dev em dobro.',
+
+    
+    p7_title: 'Cartera',
+    p7_desc: 'Este portafolio fue desarrollado manualmente por mí, con el apoyo de herramientas de inteligencia artificial, incluido ChatGPT, utilizadas para respaldar el proceso de desarrollo y mejora de las soluciones.',
     
     // CERTIFICATES
     university: 'Universidad',

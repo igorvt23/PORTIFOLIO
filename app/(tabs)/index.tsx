@@ -204,11 +204,9 @@ export default function Home() {
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
           <View style={styles.headerLeft}>
-            <Text style={styles.viewHome}>
-              <TouchableOpacity onPress={scrollToTop}>
-                <Image source={homeImage} style={styles.logoHome} />
-              </TouchableOpacity>
-            </Text>
+            <TouchableOpacity onPress={scrollToTop} style={styles.viewHome}>
+              <Image source={homeImage} style={styles.logoHome} />
+            </TouchableOpacity>
           </View>
           {!isCompactHeader && <View style={styles.headerCenter}>{renderNavButtons()}</View>}
           <View style={styles.headerRight}>
